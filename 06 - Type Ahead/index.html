@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+const defaultHTML = document.querySelector('.suggestions').innerHTML
+
+fetch(endpoint).then(res => res.json()).then(json => {
+  const cities = json.map(c => ({ name: `${c.city}, ${c.state}`, population: c.population }))
+
+  document.querySelector('.search').addEventListener('input', e => {
+    const input = e.target.value.toLowerCase()
+    const suggestions = cities.filter(c => c.name.toLowerCase().includes(input))
+    const ul = document.querySelector('.suggestions')
+
+    if (input.replace(/\s/g, '') == '') {
+      ul.innerHTML = defaultHTML
+      return
+    }
+
+    let html = ''
+    suggestions.forEach(city => {
+      const capitalizedInput = input.charAt(0).toUpperCase() + input.slice(1)
+
+      const cityName = city.name
+        .replace(RegExp(input, 'g'), `<span class='hl'>${input}</span>`)
+        .replace(RegExp(capitalizedInput, 'g'), `<span class='hl'>${capitalizedInput}</span>`)
+      
+      const cityHTML = `
+        <li>
+          <span class='name'>${cityName}</span>
+          <span class='population'>${city.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+        </li>
+      `
+      html += cityHTML
+    })
+    ul.innerHTML = html
+  })
+})
+</script>
+</body>
+</html>
