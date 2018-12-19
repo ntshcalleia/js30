@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  const secret = 'natasha'
+  let streak = ''
+
+  window.addEventListener('keyup', (e) => {
+    streak += e.key.toLowerCase()
+    
+    if (streak == secret) {
+      console.log('you did it, hooray.')
+      cornify_add()
+    } else if (!secret.startsWith(streak)) {
+      streak = e.key.toLowerCase()
+    }
+  })
+</script>
+</body>
+</html>
