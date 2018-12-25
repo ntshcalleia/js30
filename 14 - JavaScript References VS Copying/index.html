@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Reference VS Copy</title>
+</head>
+<body>
+
+  <script>
+    // start with strings, numbers and booleans
+
+    // Let's say we have an array
+    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+
+    // and we want to make a copy of it.
+
+    // You might think we can just do something like this:
+    const team = players
+
+    // however what happens when we update that array?
+    team.push('Natasha')
+
+    // now here is the problem!
+    console.log(players)
+
+    // oh no - we have edited the original array too!
+    players.pop()
+
+    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+
+    // So, how do we fix this? We take a copy instead!
+    const copy0 = players.slice()
+    copy0.push('Fellipe')
+    console.group('Using slice:')
+    console.log(players)
+    console.log(copy0)
+    console.groupEnd('Using slice:')
+
+    // one way
+    const copy1 = Array.from(players)
+    copy1.push('Camila')
+    console.group('Using Array.from():')
+    console.log(players)
+    console.log(copy1)
+    console.groupEnd('Using Array.from():')
+
+    // or create a new array and concat the old one in
+    const copy2 = [].concat(players)
+    copy2.push('Joaquim')
+    console.group('Creating a new array and concating the old one in:')
+    console.log(players)
+    console.log(copy2)
+    console.groupEnd('Creating a new array and concating the old one in:')
+
+    // or use the new ES6 Spread
+    const copy3 = [...players]
+    copy3.push('Carlos')
+    console.group('Using ES6 Spread Operator:')
+    console.log(players)
+    console.log(copy3)
+    console.groupEnd('Using ES6 Spread Operator:')
+    // now when we update it, the original one isn't changed
+
+    // The same thing goes for objects, let's say we have a person object
+
+    // with Objects
+    const person = {
+      name: 'Wes Bos',
+      age: 80
+    };
+
+    // and think we make a copy:
+    const developer = person
+    developer.age = 25
+    console.log(person)
+
+    // how do we take a copy instead?
+    const copy = Object.assign({}, person)
+    copy.job = 'Developer'
+    console.log(copy)
+    console.log(person)
+    // We will hopefully soon see the object ...spread
+
+    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+
+  </script>
+
+</body>
+</html>
